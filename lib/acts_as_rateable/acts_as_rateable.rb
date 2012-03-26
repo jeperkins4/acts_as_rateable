@@ -7,13 +7,19 @@ module ActiveRecord
 
       module AssignRateWithUserId
 			  def <<( rate )
+          r = Rating.where(:user_id => rate.user_id, :name => rate.name, :rateable_id => proxy_owner.owner.id, :rateable_type => proxy_owner.owner.class, :created_at => Time.now.midnight..(Time.now.midnight + 1.day)).first
+          if r
+            r.rate = rate
+          else
 			      r = Rating.new
 			      r.rate = rate
 			      r.rateable = proxy_owner
+            r.name = rate.name
 			      r.user_id = rate.user_id
             r.free_text = rate.free_text
             r.rater_name = rate.rater_name
 			      r.save
+          end
 			  end
 			end
 
@@ -44,7 +50,7 @@ module ActiveRecord
         #
         # todo refactor the 'id' & 'login' method names to the acts_as_rateable options hash and make it configurable
         #
-				def rate_it( score, user, free_text = "" )
+				def rate_it( score, user, name = nil, free_text = "" )
 					return unless score
 					rate = Rate.find_or_create_by_score( score.to_i )
           raise "User must respond to 'id' in order to set the user ID!" unless user.respond_to? :id
@@ -52,6 +58,7 @@ module ActiveRecord
           rate.user_id = user.id
           rate.free_text = free_text
           rate.rater_name = user.login
+          rate.name = name
 					rates << rate
 				end
 

@@ -8,5 +8,6 @@ class Rate < ActiveRecord::Base
 	attr_accessor :user_id
 	attr_accessor :free_text
 	attr_accessor :rater_name
+  attr_accessor :name
 
 end

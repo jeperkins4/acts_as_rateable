@@ -7,6 +7,8 @@ In this case, one user can rate an object once. Used on cotcot.hu for article ra
 A 'free text' attribute has been added to the pure numerical rating. The 'free text' serves as
 the user's rating description or comment.
 
+A 'name' attribute has been added to the rating so that multiple ratings per model is now supported.
+
 ==Install
 
 You can easily install gem by adding this line into your Gemfile:
@@ -31,6 +33,7 @@ Now you can rate it ( 1-# )or calculate the average rating.
 
   # rate for selected post
   @post.rate_it( 4, current_user ) #=> true || false
+  @post.rate_it( 4, current_user, 'Relevance')
 
   # average rating of selected post
   @post.average_rating #=> 4.0
